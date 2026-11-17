@@ -1,0 +1,96 @@
+erDiagram
+    DEPARTMENTS ||--o{ DOCTORS : has
+    DEPARTMENTS ||--o{ BEDS : contains
+    PATIENTS ||--o{ APPOINTMENTS : books
+    DOCTORS ||--o{ APPOINTMENTS : handles
+    PATIENTS ||--o{ ADMISSIONS : has
+    DOCTORS ||--o{ ADMISSIONS : manages
+    BEDS ||--o{ ADMISSIONS : allocated_over_time
+    PATIENTS ||--o{ BILLS : billed
+    APPOINTMENTS ||--o| BILLS : may_generate
+    ADMISSIONS ||--o| BILLS : may_generate
+    PATIENTS ||--o{ PRESCRIPTIONS : receives
+    DOCTORS ||--o{ PRESCRIPTIONS : writes
+    MEDICINES ||--o{ PRESCRIPTIONS : prescribed
+    PATIENTS ||--o{ PATIENT_FEEDBACK : submits
+    APPOINTMENTS ||--o| PATIENT_FEEDBACK : receives
+
+    DEPARTMENTS {
+        int dept_id PK
+        varchar dept_name UK
+        int floor_no
+    }
+    DOCTORS {
+        int doctor_id PK
+        varchar doctor_name
+        int dept_id FK
+        varchar specialization
+        decimal consultation_fee
+        enum shift
+    }
+    PATIENTS {
+        int patient_id PK
+        varchar full_name
+        enum gender
+        date dob
+        varchar city
+        varchar phone
+    }
+    BEDS {
+        int bed_id PK
+        int dept_id FK
+        enum bed_type
+        decimal daily_charge
+        enum status
+    }
+    APPOINTMENTS {
+        int appointment_id PK
+        int patient_id FK
+        int doctor_id FK
+        date appointment_date
+        time appointment_time
+        enum status
+    }
+    ADMISSIONS {
+        int admission_id PK
+        int patient_id FK
+        int doctor_id FK
+        int bed_id FK
+        date admit_date
+        date discharge_date
+        varchar diagnosis
+        decimal treatment_charges
+        enum status
+    }
+    BILLS {
+        int bill_id PK
+        int patient_id FK
+        int appointment_id FK
+        int admission_id FK
+        decimal amount
+        enum payment_status
+        date bill_date
+    }
+    MEDICINES {
+        int medicine_id PK
+        varchar medicine_name UK
+        varchar category
+        decimal unit_price
+        int stock_quantity
+        date expiry_date
+    }
+    PRESCRIPTIONS {
+        int prescription_id PK
+        int patient_id FK
+        int doctor_id FK
+        int medicine_id FK
+        int quantity
+        date prescription_date
+    }
+    PATIENT_FEEDBACK {
+        int feedback_id PK
+        int patient_id FK
+        int appointment_id FK_UK
+        int rating
+        date feedback_date
+    }
